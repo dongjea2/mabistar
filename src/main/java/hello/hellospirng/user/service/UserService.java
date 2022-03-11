@@ -5,6 +5,7 @@ import hello.hellospirng.user.dto.UserDTO;
 import hello.hellospirng.user.entity.Authority;
 import hello.hellospirng.user.entity.User;
 import hello.hellospirng.user.repository.UserRepository;
+import hello.hellospirng.user.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,26 @@ public class UserService {
     ModelMapper modelMapper;
 
 
+    public Optional<User> getMyUserWithAuthorities(){
+        return SecurityUtil.getCurrentUserEmail().flatMap(userRepository::findOneWithAuthoritiesByEmail);
+    }
+
+    public Optional<User> getUserWithAuthorities(String userNo){
+        Optional<User> u = userRepository.findById(Long.parseLong(userNo));
+
+        if(u.isEmpty()){
+            return Optional.empty();
+        }
+        return userRepository.findOneWithAuthoritiesByEmail(u.get().getEmail());
+    }
+
     public boolean signIn(final LoginDTO loginDto){
         try {
             User loginUser = modelMapper.map(loginDto, User.class );
 
             //1.Email check
             Optional<User> userFromDB = userRepository.findByEmail(loginUser.getEmail());
-            if(!userFromDB.isPresent()){
+            if(userFromDB.isEmpty()){
                 throw new Exception();
             }
 
@@ -67,7 +81,7 @@ public class UserService {
                 throw new Exception();
             }
 
-            //1. add Authority
+            //1. add Default Authority
             Authority defaultAuth = new Authority();
             defaultAuth.setAuthorityName("ROLE_USER");
             createdUser.setAuthorities(Collections.singleton(defaultAuth));
@@ -86,6 +100,5 @@ public class UserService {
             return false;
         }
     }
-
 
 }
