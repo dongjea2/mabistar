@@ -36,12 +36,12 @@ public class UserController {
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public Object getMyInfo(){
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
+        return ResponseEntity.ok(userService.getMyUserWithAuthorities().orElse(null));
     }
 
     @GetMapping("/user/{userNo}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public Object getUserInfo(@PathVariable String userNo){
-        return ResponseEntity.ok(userService.getUserWithAuthorities(userNo).get());
+        return ResponseEntity.ok(userService.getUserWithAuthorities(userNo).orElse(null));
     }
 }
