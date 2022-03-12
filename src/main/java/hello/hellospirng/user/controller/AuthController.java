@@ -5,7 +5,6 @@ import hello.hellospirng.user.dto.TokenDTO;
 import hello.hellospirng.user.jwt.JwtFilter;
 import hello.hellospirng.user.jwt.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +21,13 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 public class AuthController {
-    @Autowired
-    TokenProvider tokenProvider;
-    @Autowired
-    AuthenticationManagerBuilder managerBuilder;
+    final TokenProvider tokenProvider;
+    final AuthenticationManagerBuilder managerBuilder;
+
+    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder managerBuilder) {
+        this.tokenProvider = tokenProvider;
+        this.managerBuilder = managerBuilder;
+    }
 
     @PostMapping("/auth")
     public ResponseEntity<TokenDTO> auth(@Valid @RequestBody LoginDTO loginDTO){

@@ -8,7 +8,6 @@ import hello.hellospirng.user.repository.UserRepository;
 import hello.hellospirng.user.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,15 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ModelMapper modelMapper;
+    final PasswordEncoder passwordEncoder;
+    final UserRepository userRepository;
+    final ModelMapper modelMapper;
 
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ModelMapper modelMapper) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Optional<User> getMyUserWithAuthorities(){
         return SecurityUtil.getCurrentUserEmail().flatMap(userRepository::findOneWithAuthoritiesByEmail);

@@ -3,7 +3,6 @@ package hello.hellospirng.user.config;
 import hello.hellospirng.user.jwt.JwtAccessDeniedHandler;
 import hello.hellospirng.user.jwt.JwtAuthenticationEntryPoint;
 import hello.hellospirng.user.jwt.TokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,12 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private TokenProvider tokenProvider;
-    @Autowired
-    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final TokenProvider tokenProvider;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    public SecurityConfig(TokenProvider tokenProvider, JwtAccessDeniedHandler deniedHandler, JwtAuthenticationEntryPoint entryPoint){
+        this.tokenProvider = tokenProvider;
+        this.jwtAccessDeniedHandler = deniedHandler;
+        this.jwtAuthenticationEntryPoint = entryPoint;
+    }
 
 
 
