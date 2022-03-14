@@ -19,7 +19,7 @@ public class QAuthority extends EntityPathBase<Authority> {
 
     public static final QAuthority authority = new QAuthority("authority");
 
-    public final StringPath authorityName = createString("authorityName");
+    public final EnumPath<hello.hellospirng.user.enums.RoleType> authorityType = createEnum("authorityType", hello.hellospirng.user.enums.RoleType.class);
 
     public QAuthority(String variable) {
         super(Authority.class, forVariable(variable));
