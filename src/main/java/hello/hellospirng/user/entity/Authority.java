@@ -4,10 +4,7 @@ import hello.hellospirng.user.enums.RoleType;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -15,6 +12,7 @@ import javax.persistence.Id;
 public class Authority {
     @Id
     @Enumerated(EnumType.STRING)
+    @Column(name = "authority_type")
     private RoleType authorityType;
 
     @Override
