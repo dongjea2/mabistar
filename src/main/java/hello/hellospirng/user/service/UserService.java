@@ -2,8 +2,8 @@ package hello.hellospirng.user.service;
 
 import hello.hellospirng.user.dto.LoginDTO;
 import hello.hellospirng.user.dto.UserDTO;
-import hello.hellospirng.user.entity.Authority;
 import hello.hellospirng.user.entity.User;
+import hello.hellospirng.user.enums.RoleType;
 import hello.hellospirng.user.repository.UserRepository;
 import hello.hellospirng.user.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.Optional;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class UserService {
     final UserRepository userRepository;
     final ModelMapper modelMapper;
 
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ModelMapper modelMapper) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ModelMapper modelMapper, EntityManager entityManager) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
@@ -83,10 +83,7 @@ public class UserService {
             }
 
             //1. add Default Authority
-            Authority defaultAuth = new Authority();
-            defaultAuth.setAuthorityName("ROLE_USER");
-            createdUser.setAuthorities(Collections.singleton(defaultAuth));
-
+            createdUser.addAuthority(RoleType.ROLE_USER);
 
             //2. password encoding
             String encodePassword = passwordEncoder.encode(createdUser.getPassword());
