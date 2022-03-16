@@ -14,5 +14,6 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private String imgUrl;
     private String postContent;
 }
