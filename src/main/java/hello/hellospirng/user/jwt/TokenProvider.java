@@ -34,7 +34,7 @@ public class TokenProvider implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         log.info("[afterPropertiesSet]");
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -42,7 +42,6 @@ public class TokenProvider implements InitializingBean {
 
     public String createToken(Authentication authentication){
         //권한생성
-        log.info("[createToken]");
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -51,12 +50,20 @@ public class TokenProvider implements InitializingBean {
         long now = (new Date()).getTime();
         Date validity = new Date( now + this.tokenValidityInMillseconds);
 
+        //대칭키로 암호화 하기
+        log.info("[createToken]");
+//        String  token = Jwts.builder()
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
+//        try {
+//            return TokenIncripter.encAES(token);
+//        }catch (Exception e){
+//            return null;
+//        }
     }
 
     public Authentication getAuthentication(String token){
@@ -91,6 +98,7 @@ public class TokenProvider implements InitializingBean {
         }catch (ExpiredJwtException e){
             log.warn("만료된 토큰입니다.");
         }catch (UnsupportedJwtException e){
+            //todo:토큰위조 블럭하기
             log.warn("지원되지 않는 토큰입니다.");
         }catch (IllegalArgumentException e){
             log.warn("JWT 토큰이 잘못되었습니다.");
