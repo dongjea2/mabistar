@@ -1,6 +1,6 @@
-package hello.hellospirng.main.repository;
+package hello.hellospirng.post.repository;
 
-import hello.hellospirng.main.entity.QPost;
+import hello.hellospirng.post.entity.QPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ public class QueryRepository {
     @Autowired
     EntityManager em;
 
-    private QPost post = QPost.post;
+    private final QPost post = QPost.post;
 }

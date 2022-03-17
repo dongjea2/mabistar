@@ -1,17 +1,17 @@
-package hello.hellospirng.main.repository;
+package hello.hellospirng.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import hello.hellospirng.main.entity.Post;
+import hello.hellospirng.post.entity.Post;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static hello.hellospirng.main.entity.QPost.post;
+import static hello.hellospirng.post.entity.QPost.post;
 
 @Repository
 public class PostCustomRepositoryImpl implements PostCustomRepository{
 
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory  jpaQueryFactory;
 
     public PostCustomRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;

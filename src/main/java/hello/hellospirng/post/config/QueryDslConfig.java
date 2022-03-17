@@ -1,4 +1,4 @@
-package hello.hellospirng.config;
+package hello.hellospirng.post.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package hello.hellospirng.main.entity;
+package hello.hellospirng.post.entity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,7 @@
 package hello.hellospirng.main.repository;
 
-import hello.hellospirng.main.entity.Post;
-import hello.hellospirng.main.repository.PostCustomRepository;
-import hello.hellospirng.main.repository.PostRepository;
+import hello.hellospirng.post.entity.Post;
+import hello.hellospirng.post.repository.PostRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ public class QueryRepositoryTest {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    PostCustomRepository postCustomRepository;
+    PostRepository postCustomRepository;
     @Autowired
     PostRepository postRepository;
 

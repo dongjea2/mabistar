@@ -1,6 +1,6 @@
-package hello.hellospirng.main.repository;
+package hello.hellospirng.post.repository;
 
-import hello.hellospirng.main.entity.Post;
+import hello.hellospirng.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
