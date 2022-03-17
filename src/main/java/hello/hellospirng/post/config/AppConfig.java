@@ -1,4 +1,4 @@
-package hello.hellospirng.config;
+package hello.hellospirng.post.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
