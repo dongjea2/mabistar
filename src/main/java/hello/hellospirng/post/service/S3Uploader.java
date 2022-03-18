@@ -30,17 +30,21 @@ public class S3Uploader {
     @Value("${s3.dir}")
     private String dir;  // S3 버킷 이름
 
-    public String  upload( MultipartFile file) throws IOException {
-        String fileName= UUID.randomUUID()+"-"+file.getOriginalFilename();
-        ObjectMetadata metadata= new ObjectMetadata();
-         byte[] bytes = IOUtils.toByteArray(file.getInputStream());
-         metadata.setContentLength(bytes.length);
-         //지정안하면 이미지 다운로드됨
-         metadata.setContentType("image/jpeg");
+    public String  upload( MultipartFile[] files) throws IOException {
+        String returnFilesName = "";
 
-        ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
-        amazonS3Client.putObject(new PutObjectRequest(bucket, dir +fileName, byteStream,metadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3Client.getUrl(bucket,dir+fileName).toString();
+        for(MultipartFile file : files) {
+            String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            ObjectMetadata metadata = new ObjectMetadata();
+            byte[] bytes = IOUtils.toByteArray(file.getInputStream());
+            metadata.setContentLength(bytes.length);
+            metadata.setContentType("image/png"); //지정안하면 이미지 클릭시 자동으로 다운로드됨
+
+            ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, dir + fileName, byteStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            returnFilesName = "["+amazonS3Client.getUrl(bucket,dir+fileName)+"]\n";
+        }
+        return returnFilesName;
     }
 }

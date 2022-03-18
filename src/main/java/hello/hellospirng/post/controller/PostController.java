@@ -1,5 +1,6 @@
 package hello.hellospirng.post.controller;
 
+import hello.hellospirng.post.dto.PostDTO;
 import hello.hellospirng.post.entity.Post;
 import hello.hellospirng.post.service.S3Uploader;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,8 +22,9 @@ public class PostController {
         this.s3Uploader = s3Uploader;
     }
 
-    @GetMapping("/index")
-    public Object test(){
+    @RequestMapping("/test")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public Object st(){
         Map<String, String> retrunMap = new HashMap<>();
         retrunMap.put("hi","hello");
         return retrunMap;
@@ -39,8 +40,10 @@ public class PostController {
 
     @PostMapping("/images")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public String upload(@RequestParam("images") MultipartFile multipartFile) throws  IOException {
-        return s3Uploader.upload(multipartFile);
+    public String upload(@ModelAttribute PostDTO post) throws  IOException {
+        log.info(post.getPostContent());
+        return s3Uploader.upload(post.getPostImages());
     }
+
 
 }
