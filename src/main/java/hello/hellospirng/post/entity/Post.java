@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,6 +15,11 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String imgUrl;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "post_files",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id"))
+    private Set<Files> imgUrl;
+    @Column(name = "post_content")
     private String postContent;
 }
