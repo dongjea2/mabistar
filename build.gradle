@@ -46,6 +46,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	//이거 추가 안하면 테스트 코드 오류남
+	testImplementation "com.amazonaws:aws-java-sdk-s3:1.11.914"
 }
 
 tasks.named('test') {
