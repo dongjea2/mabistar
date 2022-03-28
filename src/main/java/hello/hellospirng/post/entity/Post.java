@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -15,11 +16,20 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
     @JoinTable(name = "post_files",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
-    private Set<Files> imgUrl;
+    private Set<File> imgUrl;
+
+    public Post() {
+        imgUrl = new HashSet<>();
+    }
+
     @Column(name = "post_content")
     private String postContent;
+
+    public void addImageFile(File file){
+        imgUrl.add(file);
+    }
 }
