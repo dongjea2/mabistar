@@ -16,7 +16,7 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "post_files",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
