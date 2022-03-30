@@ -57,7 +57,7 @@ public class S3Uploader {
             amazonS3Client.deleteObject(deleteObj);
             log.info(String.format("[%s] 삭제 요청 완료", key));
             return true;
- 
+
         }catch (Exception e ){
             log.warn(String.format("[%s] 삭제 요청 실패", key));
             return false;
