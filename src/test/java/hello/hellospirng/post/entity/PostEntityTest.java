@@ -41,11 +41,11 @@ public class PostEntityTest {
     //2.포스트 삭제해도 , 파일은 남아 있어야함
     @Test
     public void postRemoveTest(){
-        Post p =  postRepository.findById(4l).get();
+        Post p =  postRepository.findById(6l).get();
         postRepository.delete(p);
     }
 
-    //3.게시물은 연결된 상태에서, ㅇ사진을 삭제하면 실패해야함
+    //3.게시물은 연결된 상태에서, 사진을 삭제하면 실패해야함
     @Test
     public void fileRemoveTest(){
         File f = fileRepository.findById(2l).get();
