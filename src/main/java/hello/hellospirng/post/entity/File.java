@@ -28,5 +28,12 @@ public class File {
 
 
 
+    public String getS3Key(){
+        final int KEY_INDEX = 1;
+        String[] keys = this.name.split("com/");
+
+        return keys[KEY_INDEX];
+    }
+
 
 }
