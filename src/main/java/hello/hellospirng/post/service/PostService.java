@@ -1,18 +1,19 @@
 package hello.hellospirng.post.service;
 
+import hello.hellospirng.post.dto.FileDTO;
+import hello.hellospirng.post.dto.PostAddDTO;
 import hello.hellospirng.post.dto.PostDTO;
 import hello.hellospirng.post.entity.File;
 import hello.hellospirng.post.entity.Post;
 import hello.hellospirng.post.repository.PostRepository;
 import hello.hellospirng.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -21,15 +22,36 @@ public class PostService {
     private final S3Uploader s3Uploader;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public PostService(S3Uploader s3Uploader, PostRepository postRepository, UserRepository userRepository) {
+    public PostService(S3Uploader s3Uploader, PostRepository postRepository, UserRepository userRepository , ModelMapper modelMapper) {
         this.s3Uploader = s3Uploader;
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.modelMapper =  modelMapper;
 
     }
 
-    public boolean addPost(PostDTO postDTO){
+    public List<PostDTO> findByAllPost(){
+        List<PostDTO> returnPostDTO= new ArrayList<>();
+
+        for ( Post p : postRepository.findAll()){
+            PostDTO postDTO= modelMapper.map(p, PostDTO.class);
+            Set<FileDTO> files = new HashSet<>();
+
+            for(File f : p.getImgUrl()){
+                FileDTO fileDTO = new FileDTO();
+                fileDTO.setName(f.getName());
+                files.add(fileDTO);
+            }
+            postDTO.setImgUrl(files);
+            returnPostDTO.add(postDTO);
+        }
+
+        return returnPostDTO;
+    }
+
+    public boolean addPost(PostAddDTO postDTO){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserDetails ud = (UserDetails)principal;
         String userEmail = ud.getUsername();
@@ -64,11 +86,16 @@ public class PostService {
         if(opt.isEmpty()){return false;}
         Post post = opt.get();
 
-        for( File url : post.getImgUrl()){
-            s3Uploader.delete(url.getName());
+        try {
+            for( File f : post.getImgUrl()){
+                s3Uploader.delete(f.getS3Key());
+            }
+            postRepository.delete(post);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
 
-        postRepository.delete(post);
-        return true;
     }
 }
