@@ -49,7 +49,6 @@ public class PostEntityTest {
     @Test
     public void fileRemoveTest(){
         File f = fileRepository.findById(2l).get();
-
         fileRepository.delete(f);
     }
 }
