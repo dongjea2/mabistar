@@ -1,7 +1,6 @@
 package hello.hellospirng.post.controller;
 
-import hello.hellospirng.post.dto.PostDTO;
-import hello.hellospirng.post.entity.Post;
+import hello.hellospirng.post.dto.PostAddDTO;
 import hello.hellospirng.post.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,22 +28,29 @@ public class PostController {
         return retrunMap;
     }
 
-    @PostMapping("/post")
+    @PostMapping("/mainpage")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public Object post(@RequestBody Post post ){
-        log.info(post.getPostContent());
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public Object post(){
+        return postService.findByAllPost();
     }
 
-    @PostMapping("/images")
+    @PostMapping("/post")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<String> upload(@ModelAttribute PostDTO post) {
+    public ResponseEntity<String> upload(@ModelAttribute PostAddDTO post) {
         if(postService.addPost(post)){
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @DeleteMapping("/post")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    //ToDo: Warning:(48, 72) Cannot resolve path variable 'post' in request mapping 해결하기
+    public ResponseEntity<String> deletePost( @PathVariable PostAddDTO post){
+        if (postService.deletePost(post.getId())){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }
