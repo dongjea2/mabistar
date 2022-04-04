@@ -6,7 +6,9 @@ import hello.hellospirng.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @SpringBootTest
@@ -50,5 +52,17 @@ public class PostEntityTest {
     public void fileRemoveTest(){
         File f = fileRepository.findById(2l).get();
         fileRepository.delete(f);
+    }
+
+    //4.기존 게시글에, 파일 별도 추가 테스트
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void fileAddTest(){
+        Post p = postRepository.findById(7l).get();
+
+        File f = fileRepository.findById(1l).get();
+        p.addImageFile(f);
+        postRepository.save(p);
     }
 }
