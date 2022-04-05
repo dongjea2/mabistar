@@ -58,11 +58,21 @@ public class PostEntityTest {
     @Test
     @Transactional
     @Rollback(value = false)
-    public void fileAddTest(){
+    public void postFileAddTest(){
         Post p = postRepository.findById(7l).get();
-
         File f = fileRepository.findById(1l).get();
         p.addImageFile(f);
+        postRepository.save(p);
+    }
+
+    //5.기존 게시글에, 파일 삭제 테스트
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    public void postFileRemoveTest(){
+        Post p = postRepository.findById(7l).get();
+        File f = fileRepository.findById(1l).get();
+        p.removeImageFile(f);
         postRepository.save(p);
     }
 }
