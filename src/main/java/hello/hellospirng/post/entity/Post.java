@@ -32,4 +32,8 @@ public class Post {
     public void addImageFile(File file){
         imgUrl.add(file);
     }
+
+    public void removeImageFile(File file){
+        imgUrl.remove(file);
+    }
 }
