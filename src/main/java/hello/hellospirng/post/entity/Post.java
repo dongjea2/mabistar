@@ -1,5 +1,6 @@
 package hello.hellospirng.post.entity;
 
+import hello.hellospirng.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,18 +17,30 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "blocked_post")
+    private boolean blockedPost;
+
+    @Column(name = "post_content")
+    private String postContent;
+
+    @ManyToOne
+    @JoinColumn(name = "post_wirter")
+    private User postWriter;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "post_files",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "file_id"))
     private Set<File> imgUrl;
 
+    @OneToOne
+    @JoinColumn
+    private File thumbnail;
+
     public Post() {
         imgUrl = new HashSet<>();
     }
 
-    @Column(name = "post_content")
-    private String postContent;
 
     public void addImageFile(File file){
         imgUrl.add(file);
