@@ -24,7 +24,7 @@ public class Post {
     private String postContent;
 
     @ManyToOne
-    @JoinColumn(name = "post_wirter")
+    @JoinColumn(name = "post_writer")
     private User postWriter;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
